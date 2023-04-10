@@ -2,11 +2,11 @@ use crate::CHUNK_SUZE;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Result};
 
-pub fn read(infile: &Option<String>) -> Result<Vec<u8>> {
-    let mut reader: Box<dyn Read> = if let Some(infile) = infile {
-        Box::new(BufReader::new(File::open(infile)?))
-    } else {
+pub fn read(infile: &str) -> Result<Vec<u8>> {
+    let mut reader: Box<dyn Read> = if infile.is_empty() {
         Box::new(BufReader::new(io::stdin()))
+    } else {
+        Box::new(BufReader::new(File::open(infile)?)) // TODO: This will only read the first 16k every time!
     };
 
     let mut buffer = [0; CHUNK_SUZE];
