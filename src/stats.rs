@@ -44,7 +44,7 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
 fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64) {
     let bytes = style::style(format!("{} ", bytes)).with(Color::Red);
     let elapsed = style::style(elapsed).with(Color::Green);
-    let rate = style::style(format!(" [{:.0} Mb/s]", rate / 1024f64 / 1024f64)).with(Color::Blue);
+    let rate = style::style(format!(" [{:.0} Mb/s]", rate / 1024_f64 / 1024_f64)).with(Color::Blue);
     let _ = execute!(
         stderr,
         cursor::MoveToColumn(0),
@@ -65,5 +65,25 @@ impl TimeOutput for u64 {
         let (hours, left) = (*self / 3600, *self % 3600);
         let (minutes, seconds) = (left / 60, left % 60);
         format!("{}:{:02}:{:02}", hours, minutes, seconds)
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::TimeOutput;
+
+    #[test]
+    fn as_time_format() {
+        let pairs = vec![
+            (5_u64, "0:00:05"),
+            (60_u64, "0:01:00"),
+            (154_u64, "0:02:34"),
+            (3603_u64, "1:00:03"),
+        ];
+
+        for (input, output) in pairs {
+            assert_eq!(input.as_time().as_str(), output);
+        }
     }
 }
