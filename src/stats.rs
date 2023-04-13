@@ -68,7 +68,6 @@ impl TimeOutput for u64 {
     }
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::TimeOutput;
