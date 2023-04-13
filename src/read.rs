@@ -1,6 +1,6 @@
+use crossbeam::channel::Sender;
 use std::fs::File;
 use std::io::{self, BufReader, Read, Result};
-use crossbeam::channel::Sender;
 
 use crate::CHUNK_SUZE;
 
