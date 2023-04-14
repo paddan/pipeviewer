@@ -14,9 +14,9 @@ pub struct Args {
     #[arg(short, long)]
     pub silent: bool,
 }
-
-impl Args {
-    pub fn get() -> Self {
-        Args::parse()
-    }
-}
+//
+// impl Args {
+//     pub fn parse() -> Self {
+//         Self::parse()
+//     }
+// }
