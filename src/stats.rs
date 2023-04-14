@@ -4,7 +4,7 @@ use crossbeam::channel::Receiver;
 use crossterm::style::Stylize;
 use crossterm::{
     cursor, execute,
-    style::{self, Color, PrintStyledContent},
+    style::{self, PrintStyledContent},
     terminal::{Clear, ClearType},
 };
 use std::io::{self, Result, Stderr, Write};
@@ -42,9 +42,9 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
 }
 
 fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64) {
-    let bytes = style::style(format!("{} ", bytes)).with(Color::Red);
-    let elapsed = style::style(elapsed).with(Color::Green);
-    let rate = style::style(format!(" [{:.0} Mb/s]", rate / 1024_f64 / 1024_f64)).with(Color::Blue);
+    let bytes = style::style(format!("{} ", bytes)).red();
+    let elapsed = style::style(elapsed).green();
+    let rate = style::style(format!(" [{:.0} Mb/s]", rate / 1024_f64 / 1024_f64)).blue();
     let _ = execute!(
         stderr,
         cursor::MoveToColumn(0),
