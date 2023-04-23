@@ -4,6 +4,7 @@ pub struct Timer {
     pub start: Instant,
     pub last_instant: Instant,
     pub delta: Duration,
+    pub total: Duration,
     pub period: Duration,
     pub countdown: Duration,
     pub ready: bool,
@@ -15,6 +16,7 @@ impl Timer {
         Self {
             start: now,
             last_instant: now,
+            total: Duration::default(),
             delta: Duration::default(),
             period: Duration::from_millis(1000),
             countdown: Duration::default(),
@@ -25,6 +27,7 @@ impl Timer {
     pub fn update(&mut self) {
         let now = Instant::now();
 
+        self.total = now - self.start;
         self.delta = now - self.last_instant;
         self.last_instant = now;
         self.countdown = self.countdown.checked_sub(self.delta).unwrap_or_else(|| {

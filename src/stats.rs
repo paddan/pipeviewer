@@ -22,8 +22,9 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
     loop {
         let num_bytes = stats_rx.recv().unwrap();
         timer.update();
-        let rate_per_second = num_bytes as f64 / timer.delta.as_secs_f64();
         total_bytes += num_bytes;
+        let total_rate_per_second = total_bytes as f64 / timer.total.as_secs_f64();
+        let rate_per_second = num_bytes as f64 / timer.delta.as_secs_f64();
         if !silent && timer.ready {
             timer.ready = false;
             output_progress(
@@ -31,6 +32,7 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
                 total_bytes,
                 timer.start.elapsed().as_secs().as_time(),
                 rate_per_second,
+                total_rate_per_second,
             );
         }
 
@@ -46,17 +48,19 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
     Ok(())
 }
 
-fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64) {
+fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64, total_rate: f64) {
     let bytes = style::style(format!("{:.0} Mb ", bytes / 1024 / 1024)).red();
     let elapsed = style::style(elapsed).green();
     let rate = style::style(format!(" [{:.0} Mb/s]", rate / 1024_f64 / 1024_f64)).blue();
+    let total_rate = style::style(format!(" ({:.0} Mb/s)", total_rate / 1024_f64 / 1024_f64)).dark_blue();
     let _ = execute!(
         stderr,
         cursor::MoveToColumn(0),
         Clear(ClearType::CurrentLine),
         PrintStyledContent(bytes),
         PrintStyledContent(elapsed),
-        PrintStyledContent(rate)
+        PrintStyledContent(rate),
+        PrintStyledContent(total_rate)
     );
     let _ = stderr.flush();
 }
