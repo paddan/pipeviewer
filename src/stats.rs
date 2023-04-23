@@ -45,6 +45,10 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
         eprintln!();
     }
 
+
+
+
+
     Ok(())
 }
 
