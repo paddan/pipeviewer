@@ -3,8 +3,6 @@
 //! # some header
 //! More discussion!
 
-mod timer;
-
 use crossbeam::channel::Receiver;
 use crossterm::style::Stylize;
 use crossterm::{
@@ -14,6 +12,8 @@ use crossterm::{
 };
 use std::io::{self, Result, Stderr, Write};
 use timer::Timer;
+
+pub mod timer;
 
 pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
     let mut total_bytes = 0;
@@ -66,6 +66,7 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
 /// # Example
 /// ```rust
 /// use pipeviewer::stats::TimeOutput;
+/// use pipeviewer::timer::TimeOutput;
 /// assert_eq!(65_u64.as_time(), String::from("0:01:05"))
 /// ```
 pub trait TimeOutput {
