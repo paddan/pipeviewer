@@ -42,4 +42,3 @@ impl Default for Timer {
         Self::new()
     }
 }
-

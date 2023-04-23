@@ -45,10 +45,6 @@ pub fn stats_loop(silent: bool, stats_rx: Receiver<usize>) -> Result<()> {
         eprintln!();
     }
 
-
-
-
-
     Ok(())
 }
 
@@ -56,7 +52,8 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
     let bytes = style::style(format!("{:.0} Mb ", bytes / 1024 / 1024)).red();
     let elapsed = style::style(elapsed).green();
     let rate = style::style(format!(" [{:.0} Mb/s]", rate / 1024_f64 / 1024_f64)).blue();
-    let total_rate = style::style(format!(" ({:.0} Mb/s)", total_rate / 1024_f64 / 1024_f64)).dark_blue();
+    let total_rate =
+        style::style(format!(" ({:.0} Mb/s)", total_rate / 1024_f64 / 1024_f64)).dark_blue();
     let _ = execute!(
         stderr,
         cursor::MoveToColumn(0),
@@ -74,7 +71,6 @@ fn output_progress(stderr: &mut Stderr, bytes: usize, elapsed: String, rate: f64
 /// # Example
 /// ```rust
 /// use pipeviewer::stats::TimeOutput;
-/// use pipeviewer::timer::TimeOutput;
 /// assert_eq!(65_u64.as_time(), String::from("0:01:05"))
 /// ```
 pub trait TimeOutput {
